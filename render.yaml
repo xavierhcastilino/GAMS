@@ -1,0 +1,38 @@
+services:
+  # 1. Python Face Recognition Microservice
+  - type: web
+    name: gams-face-service
+    runtime: python
+    plan: free
+    rootDir: face-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+
+  # 2. Node.js Attendance Backend
+  - type: web
+    name: gams-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: HMAC_ROTATION_SECONDS
+        value: 20
+      - key: MATCH_THRESHOLD
+        value: 0.60
+      - key: FACE_SERVICE_URL
+        fromService:
+          name: gams-face-service
+          type: web
+          property: host

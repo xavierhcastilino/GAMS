@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: gams-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - gams-network
+
+  face-service:
+    build:
+      context: ./face-service
+      dockerfile: Dockerfile
+    container_name: gams-face-service
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - gams-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gams-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/gams
+      - JWT_SECRET=f9a8c1e34b7d902e865f3a0c71b59d846e2f183049b7c85d1e63a920f4b75c8d
+      - JWT_EXPIRES_IN=7d
+      - FACE_SERVICE_URL=http://face-service:8000
+      - HMAC_ROTATION_SECONDS=20
+      - MATCH_THRESHOLD=0.60
+    depends_on:
+      - mongodb
+      - face-service
+    networks:
+      - gams-network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  gams-network:
+    driver: bridge
