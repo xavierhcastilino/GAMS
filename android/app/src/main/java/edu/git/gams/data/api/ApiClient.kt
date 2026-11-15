@@ -21,7 +21,8 @@ object ApiClient {
     }
 
     fun getDefaultBaseUrl(): String {
-        return if (isEmulator()) "http://10.0.2.2:5000/" else "http://10.185.249.97:5000/"
+        // Live cloud server hosted on Render with MongoDB Atlas
+        return "https://gams-backend-keso.onrender.com/"
     }
 
     private var baseUrl: String = getDefaultBaseUrl()

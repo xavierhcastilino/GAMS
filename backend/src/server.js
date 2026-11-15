@@ -32,6 +32,19 @@ const QRCode = require('qrcode');
 
 const APK_PATH = path.resolve(__dirname, '../../android/app/build/outputs/apk/debug/app-debug.apk');
 
+// Root status endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    system: 'GAMS Proximity Attendance Backend API',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      download: '/download'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
