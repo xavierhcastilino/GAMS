@@ -36,10 +36,12 @@ class MainActivity : ComponentActivity() {
 
         sessionManager = SessionManager(this)
 
-        // Restore saved server URL if available (and sanitize if legacy emulator URL on physical device)
+        // Restore saved server URL if available (and sanitize if legacy local IPs on device)
         val savedUrl = sessionManager.getSavedBaseUrl()
         if (!savedUrl.isNullOrBlank()) {
-            if (savedUrl.contains("10.0.2.2") && !ApiClient.isEmulator()) {
+            if ((savedUrl.contains("10.0.2.2") && !ApiClient.isEmulator())
+                || savedUrl.contains("192.168.")
+                || savedUrl.contains("10.185.")) {
                 val correctUrl = ApiClient.getDefaultBaseUrl()
                 ApiClient.setBaseUrl(correctUrl)
                 sessionManager.saveBaseUrl(correctUrl)

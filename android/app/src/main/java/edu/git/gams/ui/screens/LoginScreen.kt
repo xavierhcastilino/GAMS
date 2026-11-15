@@ -456,7 +456,7 @@ fun LoginScreen(
                         OutlinedTextField(
                             value = serverUrlInput,
                             onValueChange = { serverUrlInput = it },
-                            placeholder = { Text("http://192.168.1.8:5000/", color = TextMuted) },
+                            placeholder = { Text("https://gams-backend-keso.onrender.com/", color = TextMuted) },
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth(),
@@ -471,10 +471,10 @@ fun LoginScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         TextButton(
-                            onClick = { serverUrlInput = "http://192.168.1.8:5000/" },
+                            onClick = { serverUrlInput = "https://gams-backend-keso.onrender.com/" },
                             modifier = Modifier.align(Alignment.End)
                         ) {
-                            Text("Use PC LAN IP (192.168.1.8)", fontSize = 12.sp, color = AccentLink)
+                            Text("Use Cloud Server (Render)", fontSize = 12.sp, color = AccentLink)
                         }
                     }
                 },
